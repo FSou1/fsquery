@@ -1,0 +1,59 @@
+{
+  var Sql = {
+    listToString: function(x, xs) {
+      return [x].concat(xs).join("");
+    }
+  };
+}
+
+Start
+  = Stmt
+  
+Stmt
+  = SelectStmt
+  
+SelectStmt
+  = SelectToken
+  _ x:SelectField xs:SelectFieldRest*
+  _ FromToken 
+  _ from:Identifier {
+       return {
+         type: "select",
+         fields: [x].concat(xs),
+         from: from
+       };
+    }
+  
+SelectToken
+  = "select"
+
+SeparatorToken
+  = ","
+  
+FromToken
+  = "from"
+  
+SelectField "select valid field"
+  = "*"
+
+SelectFieldRest
+  = SeparatorToken _ s:SelectField {
+    return s;
+  }
+
+Identifier "identifier"
+  = x:IdentStart xs:IdentRest* {
+    return Sql.listToString(x, xs);
+  }
+  
+IdentStart
+  = [a-z_./]i
+  
+IdentRest
+  = [a-z0-9_/-]i
+
+_
+  = ( WhiteSpace )
+  
+WhiteSpace "whitespace"
+  = " "
