@@ -4,6 +4,8 @@ Find files and folders with SQL-like queries.
 
 The tool is inspired by [fselect](https://github.com/jhspetersson/fselect).
 
+[![Deno](https://github.com/FSou1/fsquery/actions/workflows/deno.yml/badge.svg)](https://github.com/FSou1/fsquery/actions/workflows/deno.yml)
+
 ## Usage
 
 TBD
