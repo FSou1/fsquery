@@ -1,4 +1,4 @@
-import { assertExists } from "https://deno.land/std@0.82.0/testing/asserts.ts";
+import { assertExists } from "./deps.ts";
 
 import parser from "./parser.ts";
 

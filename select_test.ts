@@ -61,7 +61,6 @@ Deno.test("if an existing directory entry is returned when the path is a correct
 
   assert(result.length === 1);
   assertEquals(result[0].name, "a-folder");
-  assertEquals(result[0].size, 0);
   assertEquals(result[0].isFile, false);
   assertEquals(result[0].isDirectory, true);
   assertEquals(result[0].isSymlink, false);

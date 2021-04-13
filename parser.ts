@@ -1,4 +1,4 @@
-import { createRequire } from "https://deno.land/std@0.92.0/node/module.ts";
+import { createRequire } from "./deps.ts";
 
 const require = createRequire(import.meta.url);
 

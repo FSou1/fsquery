@@ -1,6 +1,4 @@
-import {
-  assert
-} from "https://deno.land/std@0.82.0/testing/asserts.ts";
+import {assert } from "./deps.ts"
 
 import { fsselect } from "./mod.ts";
 
