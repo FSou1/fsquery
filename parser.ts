@@ -1,7 +1,3 @@
-import { createRequire } from "./deps.ts";
+import parser from './peg-parser.js';
 
-const require = createRequire(import.meta.url);
-
-const parser = require("./peg-parser.js");
-
-export default parser;
+export default parser as any;
