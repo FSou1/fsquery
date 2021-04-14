@@ -8,7 +8,41 @@ The tool is inspired by [fselect](https://github.com/jhspetersson/fselect).
 
 ## Usage
 
-TBD
+In order to use the tool, import the function `fsselect` and call it with an sql-like query. That's easy.
+
+```
+import { fsselect } from 'https://deno.land/x/fsquery/mod.ts';
+
+const entries = await fsselect("select * from .");
+
+console.log(entries);
+```
+
+Output:
+```
+[
+  {
+    name: "mod.ts",
+    isFile: true,
+    isDirectory: false,
+    isSymlink: false,
+    size: 141,
+    accessedAt: 2021-04-14T04:17:46.944Z,
+    createdAt: 2021-04-13T21:00:12.353Z,
+    modifiedAt: 2021-04-14T04:16:16.692Z
+  },
+  {
+    name: "tests",
+    isFile: false,
+    isDirectory: true,
+    isSymlink: false,
+    size: 0,
+    accessedAt: 2021-04-14T04:16:17.857Z,
+    createdAt: 2021-04-14T04:16:11.120Z,
+    modifiedAt: 2021-04-14T04:16:11.120Z
+  }
+]
+```
 
 ## Functions
 
