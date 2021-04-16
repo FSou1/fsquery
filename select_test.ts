@@ -42,7 +42,7 @@ Deno.test("if an existing file entry is returned when the path is a correct fold
 
   const result = await select(query);
 
-  assert(result.length === 2);
+  assert(result.length === 1);
   assertEquals(result[0].name, "a-file.txt");
   assertEquals(result[0].size, 12);
   assertEquals(result[0].isFile, true);
@@ -77,7 +77,7 @@ Deno.test("if a 1MB file is returned when the where clause is correct", async ()
   const query: IQuery = {
     type: "select",
     fields: ["*"],
-    from: "root/test_folder_with_file",
+    from: "root/test_folder_with_files",
     where: {
       conditions: [
         {
