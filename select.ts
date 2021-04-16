@@ -1,4 +1,5 @@
 import { IDirEntry, IQuery } from "./types.ts";
+import { where } from "./where.ts";
 
 export async function select(query: IQuery): Promise<IDirEntry[]> {
   const output: IDirEntry[] = [];
@@ -11,13 +12,17 @@ export async function select(query: IQuery): Promise<IDirEntry[]> {
         isDirectory: entry.isDirectory,
         isSymlink: entry.isSymlink,
       };
+
       const path = `${query.from}/${entry.name}`;
       const info = await Deno.lstat(path);
       row.size = info.size;
       row.accessedAt = info.atime;
       row.createdAt = info.birthtime;
       row.modifiedAt = info.mtime;
-      output.push(row);
+
+      if (where(row, query.where)) {
+        output.push(row);
+      }
     }
   } catch (err) {
   }

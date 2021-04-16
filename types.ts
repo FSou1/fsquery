@@ -2,6 +2,7 @@ export interface IQuery {
   type: string;
   fields: string[];
   from: string;
+  where: IWhereClause | null;
 }
 
 export interface IDirEntry {
@@ -13,4 +14,14 @@ export interface IDirEntry {
   isFile?: boolean;
   isDirectory?: boolean;
   isSymlink?: boolean;
+}
+
+export interface IWhereClause {
+  conditions: IWhereCondition[];
+}
+
+export interface IWhereCondition {
+  left: string;
+  op: 'Different' | 'GreaterThan' | 'LessThan' | 'Equal' | 'Like';
+  right: string | number;
 }
