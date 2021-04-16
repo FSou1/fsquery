@@ -63,7 +63,9 @@ export interface IDirEntry {
 }
 ```
 
-## Example queries
+## Queries
+
+### Supported 
 
 `select * from .`
 
@@ -71,9 +73,15 @@ export interface IDirEntry {
 
 `select * from root/sub-a`
 
-## TODO
+`select * from root where size > 1000000`
 
-`select * from root where size > 0`
+`select * from root where size < 1000000`
+
+`select * from root where size = 1000000`
+
+`select * from root where size <> 1000000`
+
+### TODO
 
 `select * from root where isDirectory = true`
 
