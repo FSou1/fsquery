@@ -1,3 +1,11 @@
+/**
+ * Grammar for validating simple SQL selects.
+ * @author Marcelo Camargo
+ * @since 2015/08/26
+ * 
+ * 2021/04/16: Add '>' and '<' operators (github/FSou1)
+ */
+
 {
   var Sql = {
     listToString: function(x, xs) {
@@ -8,52 +16,153 @@
 
 Start
   = Stmt
-  
+
 Stmt
   = SelectStmt
-  
+
+/* Statements */
+
 SelectStmt
-  = SelectToken
-  _ x:SelectField xs:SelectFieldRest*
-  _ FromToken 
-  _ from:Identifier {
-       return {
-         type: "select",
-         fields: [x].concat(xs),
-         from: from
-       };
-    }
-  
+  = _ SelectToken
+    _ x:SelectField xs:SelectFieldRest*
+    _ FromToken
+    _ from:Identifier
+    _ where:WhereExpr? {
+    return {
+      type: "SELECT",
+      fields: [x].concat(xs),
+      from: from,
+      where: where
+    };
+  }
+
+SelectField "select valid field"
+  = Identifier
+  / "*"
+
+SelectFieldRest
+  = _ SeparatorToken _ s:SelectField {
+    return s;
+  }
+
+WhereExpr "where expression"
+  = WhereToken x:LogicExpr xs:LogicExprRest* {
+    return {
+      conditions: [x].concat(xs)
+    };
+  }
+
+LogicExpr
+  = _ "(" _ x:LogicExpr xs:LogicExprRest* _ ")" _ {
+    return [x].concat(xs);
+  }
+  / _ left:Expr _ op:Operator _ right:Expr _ {
+    return {
+      left: left,
+      op: op,
+      right: right
+    };
+  }
+
+LogicExprRest
+  = _ j:Joiner _ l:LogicExpr {
+    return {
+      joiner: j,
+      expression: l
+    };
+  }
+
+Joiner "joiner"
+  = OrToken  { return "Or";  }
+  / AndToken { return "And"; }
+
+Operator
+  = "<>"       { return "Different";     }
+  / ">"        { return "GreaterThan";   }
+  / "<"        { return "LessThan";      }
+  / "="        { return "Equal";         }
+  / LikeToken  { return "Like";          }
+
+/* Expressions */
+
+Expr
+  = Float
+  / Integer
+  / Identifier
+  / String
+
+Integer "integer"
+  = n:[0-9]+ {
+    return parseInt(n.join(""));
+  }
+
+Float "float"
+  = left:Integer "." right:Integer {
+    return parseFloat([
+      left.toString(),
+      right.toString()
+    ].join("."));
+  }
+
+String "string"
+  = "'" str:ValidStringChar* "'" {
+    return str.join("");
+  }
+
+ValidStringChar
+  = !"'" c:. {
+    return c;
+  }
+
+/* Tokens */
+
 SelectToken
-  = "select"
+  = "SELECT"i !IdentRest
 
 SeparatorToken
   = ","
-  
-FromToken
-  = "from"
-  
-SelectField "select valid field"
-  = "*"
 
-SelectFieldRest
-  = SeparatorToken _ s:SelectField {
-    return s;
-  }
+FromToken
+  = "FROM"i !IdentRest
+
+WhereToken
+  = "WHERE"i !IdentRest
+
+LikeToken
+  = "LIKE"i !IdentRest
+
+OrToken
+  = "OR"i !IdentRest
+
+AndToken
+  = "AND"i !IdentRest
+
+/* Identifier */
 
 Identifier "identifier"
   = x:IdentStart xs:IdentRest* {
     return Sql.listToString(x, xs);
   }
-  
+
 IdentStart
   = [a-z_./]i
-  
+
 IdentRest
   = [a-z0-9_/-]i
 
+/* Skip */
 _
-  = ( WhiteSpace )
-  
+  = ( WhiteSpace / NewLine )*
+
+NewLine "newline"
+  = "\r\n"
+  / "\r"
+  / "\n"
+  / "\u2028"
+  / "\u2029"
+
 WhiteSpace "whitespace"
   = " "
+  / "\t"
+  / "\v"
+  / "\f"
