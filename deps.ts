@@ -6,5 +6,6 @@ export {
   assert,
   assertExists,
   assertEquals,
-  assertThrows
+  assertThrows,
+  assertArrayIncludes
 } from "https://deno.land/std@0.82.0/testing/asserts.ts";

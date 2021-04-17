@@ -81,9 +81,15 @@ export interface IDirEntry {
 
 `select * from root where size <> 1000000`
 
-### TODO
-
 `select * from root where isDirectory = true`
+
+`select * from root where isDirectory = false`
+
+`select * from root where isDirectory <> true`
+
+`select * from root where isDirectory <> false`
+
+### TODO
 
 `select * from root where name = 'root.txt'`
 
