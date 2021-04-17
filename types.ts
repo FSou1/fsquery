@@ -23,5 +23,5 @@ export interface IWhereClause {
 export interface IWhereCondition {
   left: string;
   op: 'Different' | 'GreaterThan' | 'LessThan' | 'Equal' | 'Like';
-  right: string | number;
+  right: string | number | boolean;
 }
