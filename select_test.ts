@@ -1,7 +1,7 @@
 import {
   assert,
+  assertArrayIncludes,
   assertEquals,
-  assertArrayIncludes
 } from "https://deno.land/std@0.82.0/testing/asserts.ts";
 
 import { IQuery } from "./types.ts";
@@ -204,4 +204,108 @@ Deno.test("if 3 folders are returned when the where clause has isDirectory <> tr
   assertEquals(result[0].name, "root.txt");
   assertEquals(result[0].isDirectory, false);
   assertEquals(result[0].isFile, true);
+});
+
+Deno.test("if 3 folders are returned when the where clause has isFile = true", async () => {
+  const query: IQuery = {
+    type: "select",
+    fields: ["*"],
+    from: "root",
+    where: {
+      conditions: [
+        {
+          left: "isFile",
+          op: "Equal",
+          right: "true",
+        },
+      ],
+    },
+  };
+
+  const result = await select(query);
+
+  assert(result.length === 1);
+  assertEquals(result[0].name, "root.txt");
+  assertEquals(result[0].isDirectory, false);
+  assertEquals(result[0].isFile, true);
+});
+
+Deno.test("if the 'root.txt' is returned when the where clause has isFile = false", async () => {
+  const query: IQuery = {
+    type: "select",
+    fields: ["*"],
+    from: "root",
+    where: {
+      conditions: [
+        {
+          left: "isFile",
+          op: "Equal",
+          right: "false",
+        },
+      ],
+    },
+  };
+
+  const result = await select(query);
+
+  assert(result.length === 3);
+  const names = result.map((i) => i.name as string);
+  const expectedNames = [
+    "test_folder_with_file",
+    "test_folder_with_files",
+    "test_folder_with_folder",
+  ];
+  assertArrayIncludes<string>(names, expectedNames);
+});
+
+Deno.test("if the 'root.txt' is returned when the where clause has isFile <> false", async () => {
+  const query: IQuery = {
+    type: "select",
+    fields: ["*"],
+    from: "root",
+    where: {
+      conditions: [
+        {
+          left: "isFile",
+          op: "Different",
+          right: "false",
+        },
+      ],
+    },
+  };
+
+  const result = await select(query);
+
+  assert(result.length === 1);
+  assertEquals(result[0].name, "root.txt");
+  assertEquals(result[0].isDirectory, false);
+  assertEquals(result[0].isFile, true);
+});
+
+Deno.test("if 3 folders are returned when the where clause has isFile <> true", async () => {
+  const query: IQuery = {
+    type: "select",
+    fields: ["*"],
+    from: "root",
+    where: {
+      conditions: [
+        {
+          left: "isFile",
+          op: "Different",
+          right: "true",
+        },
+      ],
+    },
+  };
+
+  const result = await select(query);
+
+  assert(result.length === 3);
+  const names = result.map((i) => i.name as string);
+  const expectedNames = [
+    "test_folder_with_file",
+    "test_folder_with_files",
+    "test_folder_with_folder",
+  ];
+  assertArrayIncludes<string>(names, expectedNames);
 });
