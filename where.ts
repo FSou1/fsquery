@@ -52,6 +52,23 @@ function meet(entry: IDirEntry, condition: IWhereCondition): boolean {
     }
 
     return operation(entry.isDirectory, JSON.parse(right as string));
+  } else if (left === "isFile") {
+    const operations = {
+      "GreaterThan": null,
+      "LessThan": null,
+      "Equal": equalBoolean,
+      "Different": differentBoolean,
+      "Like": null,
+    };
+
+    const operation = operations[op];
+    if (!operation) {
+      throw new Error(
+        `The operation '${op}' is not supported for the '${left}' property`,
+      );
+    }
+
+    return operation(entry.isFile, JSON.parse(right as string));
   }
 
   return false;

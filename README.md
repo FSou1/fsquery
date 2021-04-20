@@ -89,6 +89,14 @@ export interface IDirEntry {
 
 `select * from root where isDirectory <> false`
 
+`select * from root where isFile = true`
+
+`select * from root where isFile = false`
+
+`select * from root where isFile <> true`
+
+`select * from root where isFile <> false`
+
 ### TODO
 
 `select * from root where name = 'root.txt'`
