@@ -65,6 +65,10 @@ export interface IDirEntry {
 
 ## Queries
 
+### Operators
+
+The list of supported operators: `>`, `<`, `=`, `<>`.
+
 ### Supported 
 
 `select * from .`
@@ -75,25 +79,7 @@ export interface IDirEntry {
 
 `select * from root where size > 1000000`
 
-`select * from root where size < 1000000`
-
-`select * from root where size = 1000000`
-
-`select * from root where size <> 1000000`
-
 `select * from root where isDirectory = true`
-
-`select * from root where isDirectory = false`
-
-`select * from root where isDirectory <> true`
-
-`select * from root where isDirectory <> false`
-
-`select * from root where isFile = true`
-
-`select * from root where isFile = false`
-
-`select * from root where isFile <> true`
 
 `select * from root where isFile <> false`
 
