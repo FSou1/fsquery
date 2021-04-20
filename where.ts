@@ -34,7 +34,7 @@ function meet(entry: IDirEntry, condition: IWhereCondition): boolean {
       );
     }
 
-    return operation(entry.size, <number>right);
+    return operation(entry.size, <number> right);
   } else if (left === "isDirectory") {
     const operations = {
       "GreaterThan": null,
@@ -69,6 +69,23 @@ function meet(entry: IDirEntry, condition: IWhereCondition): boolean {
     }
 
     return operation(entry.isFile, JSON.parse(right as string));
+  } else if (left === "name") {
+    const operations = {
+      "GreaterThan": null,
+      "LessThan": null,
+      "Equal": equalString,
+      "Different": differentString,
+      "Like": null,
+    };
+
+    const operation = operations[op];
+    if (!operation) {
+      throw new Error(
+        `The operation '${op}' is not supported for the '${left}' property`,
+      );
+    }
+
+    return operation(entry.name, right as string);
   }
 
   return false;
@@ -97,5 +114,14 @@ function equalBoolean(left: boolean | undefined, right: boolean): boolean {
 }
 
 function differentBoolean(left: boolean | undefined, right: boolean): boolean {
+  return typeof left !== "undefined" && left !== right;
+}
+
+/* String */
+function equalString(left: string | undefined, right: string): boolean {
+  return typeof left !== "undefined" && left === right;
+}
+
+function differentString(left: string | undefined, right: string): boolean {
   return typeof left !== "undefined" && left !== right;
 }
