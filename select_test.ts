@@ -309,3 +309,114 @@ Deno.test("if 3 folders are returned when the where clause has isFile <> true", 
   ];
   assertArrayIncludes<string>(names, expectedNames);
 });
+
+Deno.test("if the 'root.txt' is returned when the where clause has name = 'root.txt'", async () => {
+  const query: IQuery = {
+    type: "select",
+    fields: ["*"],
+    from: "root",
+    where: {
+      conditions: [
+        {
+          left: "name",
+          op: "Equal",
+          right: "root.txt",
+        },
+      ],
+    },
+  };
+
+  const result = await select(query);
+
+  assert(result.length === 1);
+  assertEquals(result[0].name, "root.txt");
+  assertEquals(result[0].isDirectory, false);
+  assertEquals(result[0].isFile, true);
+});
+
+Deno.test("if a folder is returned when the where clause has name = 'test_folder_with_folder'", async () => {
+  const query: IQuery = {
+    type: "select",
+    fields: ["*"],
+    from: "root",
+    where: {
+      conditions: [
+        {
+          left: "name",
+          op: "Equal",
+          right: "test_folder_with_folder",
+        },
+      ],
+    },
+  };
+
+  const result = await select(query);
+
+  assert(result.length === 1);
+  assertEquals(result[0].name, "test_folder_with_folder");
+  assertEquals(result[0].isDirectory, true);
+  assertEquals(result[0].isFile, false);
+});
+
+
+
+
+
+
+
+
+Deno.test("if the 'root.txt' is not returned when the where clause has name <> 'root.txt'", async () => {
+  const query: IQuery = {
+    type: "select",
+    fields: ["*"],
+    from: "root",
+    where: {
+      conditions: [
+        {
+          left: "name",
+          op: "Different",
+          right: "root.txt",
+        },
+      ],
+    },
+  };
+
+  const result = await select(query);
+
+  assert(result.length === 3);
+  const names = result.map((i) => i.name as string);
+  const expectedNames = [
+    "test_folder_with_file",
+    "test_folder_with_files",
+    "test_folder_with_folder",
+  ];
+  assertArrayIncludes<string>(names, expectedNames);
+});
+
+Deno.test("if a folder is returned when the where clause has name <> 'test_folder_with_folder'", async () => {
+  const query: IQuery = {
+    type: "select",
+    fields: ["*"],
+    from: "root",
+    where: {
+      conditions: [
+        {
+          left: "name",
+          op: "Different",
+          right: "test_folder_with_folder",
+        },
+      ],
+    },
+  };
+
+  const result = await select(query);
+
+  assert(result.length === 3);
+  const names = result.map((i) => i.name as string);
+  const expectedNames = [
+    "test_folder_with_file",
+    "test_folder_with_files",
+    "root.txt",
+  ];
+  assertArrayIncludes<string>(names, expectedNames);
+});

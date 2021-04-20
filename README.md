@@ -83,9 +83,9 @@ The list of supported operators: `>`, `<`, `=`, `<>`.
 
 `select * from root where isFile <> false`
 
-### TODO
-
 `select * from root where name = 'root.txt'`
+
+### TODO
 
 `select * from root where name like '%txt'`
 
