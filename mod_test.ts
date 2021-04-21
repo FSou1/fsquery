@@ -4,7 +4,7 @@ import { fsselect } from "./mod.ts";
 
 Deno.test("if 'select * from .' works", async () => {
   const result = await fsselect("select * from .");
-  assert(result.length === 18);
+  assert(result.length === 20);
 });
 
 Deno.test("if 'select * from root' works", async () => {
