@@ -67,7 +67,7 @@ export interface IDirEntry {
 
 ### Operators
 
-The list of supported operators: `>`, `<`, `=`, `<>`.
+The list of supported operators: `>`, `<`, `=`, `<>`, `like`.
 
 ### Supported 
 
@@ -85,10 +85,4 @@ The list of supported operators: `>`, `<`, `=`, `<>`.
 
 `select * from root where name = 'root.txt'`
 
-### TODO
-
-`select * from root where name like '%txt'`
-
-`select * from root where name like '%txt%'`
-
-`select * from root where name like 'txt%'`
+`select * from root where name like '%.txt'`
