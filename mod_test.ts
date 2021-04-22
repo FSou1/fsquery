@@ -4,7 +4,7 @@ import { fsselect } from "./mod.ts";
 
 Deno.test("if 'select * from .' works", async () => {
   const result = await fsselect("select * from .");
-  assert(result.length === 18);
+  assert(result.length === 20);
 });
 
 Deno.test("if 'select * from root' works", async () => {
@@ -145,6 +145,78 @@ Deno.test("if select * from root where name <> 'root.txt' works", async () => {
     "test_folder_with_file",
     "test_folder_with_files",
     "test_folder_with_folder",
+  ];
+  assertArrayIncludes<string>(names, expectedNames);
+});
+
+Deno.test("if select * from root where name like 'test_%' works", async () => {
+  const result = await fsselect("select * from root where name like 'test_%'");
+  assert(result.length === 3);
+
+  const names = result.map((i) => i.name as string);
+  const expectedNames = [
+    "test_folder_with_file",
+    "test_folder_with_files",
+    "test_folder_with_folder",
+  ];
+  assertArrayIncludes<string>(names, expectedNames);
+});
+
+Deno.test("if select * from root where name like '%folder%' works", async () => {
+  const result = await fsselect("select * from root where name like '%folder%'");
+  assert(result.length === 3);
+
+  const names = result.map((i) => i.name as string);
+  const expectedNames = [
+    "test_folder_with_file",
+    "test_folder_with_files",
+    "test_folder_with_folder",
+  ];
+  assertArrayIncludes<string>(names, expectedNames);
+});
+
+Deno.test("if select * from root where name like '%.txt' works", async () => {
+  const result = await fsselect("select * from root where name like '%.txt'");
+  assert(result.length === 1);
+
+  const names = result.map((i) => i.name as string);
+  const expectedNames = [
+    "root.txt"
+  ];
+  assertArrayIncludes<string>(names, expectedNames);
+});
+
+Deno.test("if select * from root where name like '%with_file%' works", async () => {
+  const result = await fsselect("select * from root where name like '%with_file%'");
+  assert(result.length === 2);
+
+  const names = result.map((i) => i.name as string);
+  const expectedNames = [
+    "test_folder_with_file",
+    "test_folder_with_files",
+  ];
+  assertArrayIncludes<string>(names, expectedNames);
+});
+
+Deno.test("if select * from root where name like 'some' does not return entries", async () => {
+  const result = await fsselect("select * from root where name like 'some'");
+  assert(result.length === 0);
+
+  const names = result.map((i) => i.name as string);
+  const expectedNames: string[] = [];
+  assertArrayIncludes<string>(names, expectedNames);
+});
+
+Deno.test("if select * from root where name like '%%' works", async () => {
+  const result = await fsselect("select * from root where name like '%%'");
+  assert(result.length === 4);
+
+  const names = result.map((i) => i.name as string);
+  const expectedNames = [
+    "test_folder_with_file",
+    "test_folder_with_files",
+    "test_folder_with_folder",
+    "root.txt"
   ];
   assertArrayIncludes<string>(names, expectedNames);
 });

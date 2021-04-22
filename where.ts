@@ -1,3 +1,4 @@
+import { getLikeRegExp } from "./like.ts";
 import { IDirEntry, IWhereClause, IWhereCondition } from "./types.ts";
 
 export function where(entry: IDirEntry, where: IWhereClause | null): boolean {
@@ -75,7 +76,7 @@ function meet(entry: IDirEntry, condition: IWhereCondition): boolean {
       "LessThan": null,
       "Equal": equalString,
       "Different": differentString,
-      "Like": null,
+      "Like": likeString,
     };
 
     const operation = operations[op];
@@ -124,4 +125,8 @@ function equalString(left: string | undefined, right: string): boolean {
 
 function differentString(left: string | undefined, right: string): boolean {
   return typeof left !== "undefined" && left !== right;
+}
+
+function likeString(left: string | undefined, right: string): boolean {
+  return typeof left !== "undefined" && left.match( getLikeRegExp(right) ) != null;
 }
